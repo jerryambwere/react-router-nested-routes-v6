@@ -1,32 +1,16 @@
-import { useState, useEffect } from "react";
+import { Outlet, useOutletContext } from 'react-router-dom';
 import UserCard from "../components/UserCard";
-import NavBar from "../components/NavBar";
 
 function Home() {
-  const [users, setUsers] = useState([]);
+    const users = useOutletContext();  // Accessing context data
 
-  useEffect(() =>{
-    fetch("http://localhost:4000/users")
-      .then(r => r.json())
-      .then(data => setUsers(data))
-      .catch(error => console.error(error));
-  }, []);
-  
-  const userList = users.map(user =>{
-    return <UserCard key={user.id} user={user}/>;
-  });
-
-  return (
-    <>
-      <header>
-        <NavBar />
-      </header>
-      <main>
-        <h1>Home!</h1>
-        {userList}
-      </main>
-    </>
-  );
-};
+    return (
+        <main>
+            <h1>Home!</h1>
+            <Outlet />  {/* This will render nested routes */}
+            {users.map(user => <UserCard key={user.id} user={user} />)}
+        </main>
+    );
+}
 
 export default Home;
